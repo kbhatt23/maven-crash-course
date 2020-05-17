@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>java-app-version1-webapp</artifactId>
+	<packaging>jar</packaging>
+	<name>java-app-version1-webapp</name>
+	<url>http://maven.apache.org</url>
+	<parent>
+		<groupId>com.learning.maven</groupId>
+		<artifactId>webapp-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<!-- dependencies that are kept non mandatory for all can be imported using 
+		dependencymangemnet -->
+	<!-- if we do not add dependencyManagement then dependency wont be injected -->
+	<dependencies>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-math</artifactId>
+			</dependency>
+	</dependencies>
+
+</project>
