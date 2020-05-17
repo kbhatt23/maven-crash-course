@@ -5,7 +5,7 @@
 
 	<groupId>com.learning.maven</groupId>
 	<artifactId>java-app</artifactId>
-	<version>1.2</version>
+	<version>1.4-SNAPSHOT</version>
 	<!-- <version>1.1</version> -->
 
 	<name>java-app</name>
@@ -25,7 +25,7 @@
 		<url>scm:git:https://github.com/kbhatt23/maven-crash-course.git</url>
 		<connection>scm:git:https://github.com/kbhatt23/maven-crash-course.git</connection>
 		<developerConnection>scm:git:https://github.com/kbhatt23/maven-crash-course.git</developerConnection>
-		<tag>1.2-RELEASE</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 
