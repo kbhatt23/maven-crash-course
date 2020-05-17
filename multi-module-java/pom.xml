@@ -10,6 +10,22 @@
 
 	<name>java-parent</name>
 	<url>http://maven.apache.org</url>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>snapshot-repository</id>
+			<url>http://localhost:8081/repository/maven-snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>release-repository</id>
+			<url>http://localhost:8081/nexus/content/repositories/releases/</url>
+		</repository>
+	</distributionManagement>
+	<scm>
+		<url>scm:git:https://github.com/kbhatt23/maven-crash-course.git</url>
+		<connection>scm:git:https://github.com/kbhatt23/maven-crash-course.git</connection>
+		<developerConnection>scm:git:https://github.com/kbhatt23/maven-crash-course.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,4 +52,17 @@
 		</dependency>
 
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
