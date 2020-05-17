@@ -1,0 +1,7 @@
+Why we need multi module projects/POM
+a. We can keep all the common functionaloitiues/features of project into super and that can help in reusability
+
+Since child projects will take inherit featurs from super pom we get below benefits
+a. we can manage properties tag things onn super hence we can mangage dependency versions at one place. child will just inherit it
+b. plugin can be kept in super and hence plugin code tags will be kept at only one place hence saving code duplication
+c. repostiories can be shared as well

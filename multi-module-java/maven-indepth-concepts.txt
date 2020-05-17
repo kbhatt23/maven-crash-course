@@ -1,0 +1,214 @@
+maven is not just a dependency management tool
+but catually it is complete project management tool
+It has 
+- depedency management features,
+- project structure is manged via maven archetype foilder strutures
+- build managemnet features
+- automatic test
+- automatic deployment to servetr/ create docker image etc
+
+This automation helps devleoper and make them focus on their work
+
+Default settings are placed in .m2 folder with name settings.xml
+
+Any task from maven is done using plugin
+One plugon can have n number of goals
+using mv command we call this goal to do any job
+
+snapShot version means something that is still in progress and is not stable so always use release versin and not snapshot
+
+Command to create simple java based maven project:
+mvn archetype:generate -DgroupId=com.learning.maven -DartifactId=java-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
+
+command to create spring mvc project:
+mvn archetype:generate -DgroupId=com.learning.maven -DartifactId=spring-webapp -DarchetypeArtifactId=maven-archetype-webapp -DarchetypeVersion=1.4 -DinteractiveMode=false
+
+
+Maven always downloads dependency/plugin if it do not exist in local repo.
+If it exist in local repo then it do not download unless force snapshot is done/ or manual delete of file in local repo is done
+
+maven is based pon concetp of convention over configuration
+After degingn same project structure we need very less configuration
+
+to run a specific class ina  jar:
+java -cp hellomaven-1.0-SNAPSHOT.jar com.learning.App : the App.jar should have main method
+
+maven have project object model
+POM.xml -> this contains one file that can show whole details of maven project
+Features:
+a. General details : Like project name, project site url etc
+b. build details : plugins to add new goals 
+c. maven dependencies
+d. maven proeprties
+e. modules etc
+
+maven coordinates: collections of below:
+a. group id : like a package: organisation domain in reverse order
+b. artifactid : project name > class name
+c. version
+
+Even a simple pom.xml inherits from super pom whihc ave default details
+The super pom act as super class
+Effective pom will show all the pom details containing super and child pom
+
+Any maven command have plugin and goal -> plugin is like jar and each plugin can have functionalities in name of goal
+eg: mvn help:describe  -> help is plugin describe is goal
+mvn archetype:generate archetype is plugin contianning n number of tasks Each task is called as goal . generate is the goal 
+
+Maven have lifecycles and each lifeecycke has phases
+phases means individual steps iun whole lifecycle
+eg: clean , compile, build, package, deploy etc
+We can custoimize this in plugin tag to add our own task in existing phase
+
+default lifecycle executes package which compile , run test and package jar/war 
+mvn have extra lifecycle of install where we can even do deployment to tomcat/aws server etc-> need to be customized
+
+Maven have lifecycles
+like build(default) clean
+Each lifecycle have phases -> each phase may be tagged to some goal in plugin.  some phases are empty
+
+command to call describe goal of plugin help to get phase details:
+mvn help:describe -Dcmd=compile
+
+two ways of running maven command:
+mvn plugnname:goalname
+mvn phaename
+Each phase of lifecycle is bound to 0 or more plugin  goals 
+even command like mvn clean is calling phase of default lifecycle build and internally using some goal of any plugin
+mvn clean:clean  clean is plugin clean is goal
+mvn clean -> clean is phase name that is bound to clean goal of plugin clean
+
+Difference between install and package:
+package runs the compiler: compile and compiler:testcompile, then run the tests , then creates jar/war in target directory
+install: do all the above but along with this adds dependency in m2 reposntiory, so that in other maven project in same macine we can reuse the code present in jar
+deploy: do all above mentioned in ninstall, but it also try to push the jar to remote repository for maven dependency
+
+OOB plugins provided:
+a. javadoc:javadoc  this generate javadoc of projects. this will be present in target directory. on clean this will get deleted
+b. surefire plugin : this is for running unit test(not integration test). We can use plugin tag and add configuration tag and do skipTestes to true to disable test
+c. compiler : command compiler:compile   , compiler:testCompile etc
+
+-- Mvaen execution using phase of lifecycle is better than calling goal directly. As running phase will first do phases taht has to be executed before it
+   while claling direct goal we will loose this step and it will fail.
+Eg mvn test  : phase flow first compilet, testcompile and then run test and hecn it works
+mvn clean surefire:test will directly call the test and ther will be noi compiled classes to be tested by junit
+
+lets say if we are not using lifecycle phase in command
+then command to run test succesfully will be:
+- mvn clean:clean compiler:compile compiler:testCompile surefire:test
+
+HEnce Lifecycle is combination of plugin goals attached together in phases so that it becomes easier for devloper to run all the process at one command
+each phase may have one or 0 goals from plugin
+if we run commands using plugin then lot of commands need to be run whihc is not good
+hence comes lifecycle for rescue
+Eg: site  , build(default), clean
+each life cycle have phases like build have compile , test , package . any phase when executed automatically calls dependent phase on its own
+
+eg mvn package  will do compile, then test and then jar:jar goal execution
+
+Clean lifecycle have one phase clean that calls clean:clean goal
+
+Build lifecycle have phaes like buildresource, compile, buildtestResource, testCompile, test , package, install and deploy
+each off these phases actually goals set of plugin goals 
+
+Site: Site :deploy phase can be used to deploy the war/jar to any app server/web server 
+
+Assembly plugin is used to put all the dependcies in a single jar so that it becomes usable like a fat jar
+with normal jar we do not get dependency
+
+maven resolve transitive dependencies
+We just need to add on dependency like spring-web,vc and all dependencies that are needed for it also will get donwloaded.
+This is called transitive dependency.
+This can be viewed in dependency heirachy
+
+scopes in dependencies:
+a. compile: This is default behviour . This will add the jar in all phases of build lifecycle. 
+		-> i.e resource, compiler:cpompile, testResource, compiler:testCompile, surefire:test, package
+	These dependecies will get added to war lib folder as well on packging/install/deploy of build lifecycle
+b. test: jar files available only in src/test/java module
+c. provided : These will be available in compile time , but on packaging these will not be available as it is expected to be present in web/app server
+d. system : A jar whihc is present in local but not in maven repo can be used for this. just provide the path and scope as provided
+e. runtime: This is used by test/,main module only in runtime. Eg: devtools . this will not be used in compile/package phase only on runtime
+f. import: this is part of dependencymanage where we are importing multiple dependencies based on single system
+
+Dependencymanagement is used to keep dependenices in parent whihc may or may not be used by submodules/child
+child woh need neede to add dependeices but need not define version
+hence version control can be done at one place -> introducing single responsibiliuty principle
+
+Maven Profile
+This tag will get initiated when profile is made active using -DprofileId command in mvn life cycle command
+Eg we need to enable one plugin/properties in some profile we can use it
+
+maven command to activate a profile
+mvn clean package -PprofileID
+
+profile can be activated in 3 ways
+a. by passing the argumen Pprofileid this has highest prioerity
+b. by using activation by default
+c. by using activation using proeprty name(passing the argument with name tag value) and value
+d. using file existin condition
+e. using os family conidtion
+f. using jdk version condition
+
+command to find active profile
+mvn help:active-profiles
+we can pass any argument like Pprofielid or in condition profile case -Dproperty=value
+
+if more than one condition passes that many profiles are active
+
+Multi module projects are hadnled by maven reactors 
+if we run maven package for parent , maven reactor will check dependency graph and run package phase on basis of dependencies , in case there are within modules
+say child 1 depends on child 2 so child 2 will first packaged and then child and so on
+The above command when executed on parent prject will do only for child projects added in <modules> tag in parent pom
+
+EG if in parent pom we od not add <modules>
+		<module>java-app-version1-webapp</module>
+		<module>spring-webapp-version1</module>
+	</modules>
+tags then it will do paclkageing only for main parent pom ,  and this way it will b very tough to idnetify sequence of package command to be executed on child projects 
+
+Reactor helps us based on modules section of parent < this is called aggregation (use of modules in parent pom)
+use of <parent> in child pom is called inheritance
+
+Profiling have to be handled inside individual child projects only and can not be inherited from parent pom project
+
+Release version never gets new modifications so maven caches in local repo and do not look from maven central repo until it is not present in local m2 repo location
+But snapshot versions are expected to have change, so it is not recommend to use that
+Also as a devloper u can use it, maven cache it for 1 day by default and hence snapshot release repo is refrehsed everyday onced and download new files form central repo
+
+Since we can not push our project related artifactories to maven central repo we need relesae repository and snapshot repository.
+We can  configure them in settings.xml
+
+Nexus OSS is a repository manager tool that we can install locally or on server. other developers can connect to thisusing intranet/internet
+
+cd C:\Kanishk\softwares\nexus\nexus-3.23.0-03\bin
+in Windows, use the command: nexus.exe /run
+
+To open repo : http://localhost:8081/
+Default password is kept at location mentioned in login popup
+username/password : admin/admin123.
+
+command to find effective settings.xml applicable for user
+mvn help:effective-settings
+
+Maven release plugin
+This is used to make a process for pushing artifacts to release repository of maven repo manager like nexus
+in normal case we might miss a  file in local and make a jar from git whihc can be dangerous as release once pushed can not be modified
+hence it is better to use release plugin golas instead of mvn deploy phase for release(can still use for snapshots)
+
+command: mvn clean install
+mvn release:prepare  -> it checks if code is present in local hwihc is not committed to git rpo metnioned in <scm> tag
+                     -> asks for release version , git SCM tag version , new snapshot version etc
+		     -> modify local pom.xml and store backup for it and push tag to scm git repo
+		     -> along with backup pom.xml files it also keep releas,properites for its next step
+mvn release:perform -> it takes a chekcout from latest git repo mentioned in <scm tag> 
+		     -> push artifacts to release repo of maven repo manager
+
+in case of errore in mvn release:prepare we can use below commands to rollback
+mvn release:rollback -> it rollbacks pom.xml from its backup file created in mvn release:prepare goal
+mvn release:clean -> clean the release repo caches
+git -d tag tagName
+git tag push origin master -> this step remove the tag from git repo
+eg:
+- git tag -d v1.4.RELEASE
+- git push --delete origin v1.4.RELEASE
