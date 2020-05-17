@@ -7,14 +7,14 @@
 	<parent>
 		<groupId>com.learning.maven</groupId>
 		<artifactId>java-parent</artifactId>
-		<version>0.0.1.RELEASE</version>
+		<version>0.0.2-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.learning.maven</groupId>
 			<artifactId>java-app-version1</artifactId>
-			<version>0.0.1.RELEASE</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

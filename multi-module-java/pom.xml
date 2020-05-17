@@ -3,7 +3,7 @@
 
 	<groupId>com.learning.maven</groupId>
 	<artifactId>java-parent</artifactId>
-	<version>0.0.1.RELEASE</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>java-parent</name>
@@ -22,7 +22,7 @@
 		<url>scm:git:https://github.com/kbhatt23/maven-crash-course.git</url>
 		<connection>scm:git:https://github.com/kbhatt23/maven-crash-course.git</connection>
 		<developerConnection>scm:git:https://github.com/kbhatt23/maven-crash-course.git</developerConnection>
-		<tag>v0.0.1.RELEASE</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
