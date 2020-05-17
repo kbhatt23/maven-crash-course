@@ -14,7 +14,7 @@ import org.apache.commons.math.stat.descriptive.DescriptiveStatistics;
  */
 public class App {
 	public static void main(String[] args) {
-		Arrays.stream(args).forEach(ar -> System.out.println("argume found "+ar));
+		Arrays.stream(args).forEach(ar -> System.out.println("argumet found "+ar));
 		System.out.println("Hello World!");
 		System.out.println("jai shree ram while preparing statistical calculations");
 		double[] values = new double[] { 65, 51, 16, 11, 6519, 191, 0, 98, 19854, 1, 32 };
